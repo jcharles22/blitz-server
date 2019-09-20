@@ -1,0 +1,55 @@
+require('dotenv').config();
+const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
+const helmet = require('helmet');
+const { NODE_ENV } = require('./config');
+const LeaderBoardService = require('./Leader-board/Leader-Board-Service')
+
+const app = express();
+const bodyParser = express.json();
+const jsonParser = express.json();
+const morganOption = (NODE_ENV === 'production')
+    ? 'tiny'
+    : 'common';
+
+app.use(morgan(morganOption));
+app.use(cors());
+app.use(helmet());
+app.get('/', (req, res) => {
+    res.send('hello')
+})
+
+
+
+
+app.get('/api/leader-board', (req, res, next) => {
+    const knexInstace = req.app.get('db')
+    LeaderBoardService.getScores(knexInstace) 
+        .then(response => res.json(response))
+});
+
+
+app.post('/api/leader-board', jsonParser, (req, res, next) => {
+    const knexInstace = req.app.get('db')
+    console.log(req.body)
+    let { users, score } = req.body
+    let newScore = {users, score}
+    console.log(newScore)
+    LeaderBoardService.insertScores(knexInstace, newScore)
+        .then(response => res.send(response))
+})
+
+
+app.use(function errorHandler(error, req, res, next) {
+    let response
+    if (NODE_ENV === 'production') {
+        response = { error: { message: 'server error' }}
+    } else { 
+        console.error(error)
+        response = { message: error.message, error }
+    }
+    res.status(500).json(response)
+});
+
+module.exports = app;
