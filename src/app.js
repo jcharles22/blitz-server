@@ -7,7 +7,6 @@ const { NODE_ENV } = require('./config');
 const LeaderBoardService = require('./Leader-board/Leader-Board-Service')
 
 const app = express();
-const bodyParser = express.json();
 const jsonParser = express.json();
 const morganOption = (NODE_ENV === 'production')
     ? 'tiny'

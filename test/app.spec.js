@@ -18,15 +18,15 @@ describe('GetScore', function () {
     }]
 
     before('make knex instance', () => {
-        db = kenx({
+        db = knex({
             client: 'pg',
             connection: process.env.TEST_DB_URL,
         })
         app.set('db', db)
     })
-    before('clean the table', () => db.raw('TRUNCATE deck_card_connection, decks, cards, users RESTART IDENTITY CASCADE'))
+    before('clean the table', () => db.raw('TRUNCATE users score RESTART IDENTITY CASCADE'))
 
-    afterEach('cleanup', () => db.raw('TRUNCATE deck_card_connection, decks, cards, users RESTART IDENTITY CASCADE'))
+    afterEach('cleanup', () => db.raw('TRUNCATE users scores RESTART IDENTITY CASCADE'))
 
     after(() => db.destroy())
 
