@@ -1,6 +1,6 @@
-# Express Boilerplate!
+# Api for Blitz
 
-This is a boilerplate project used for starting new projects!
+Blitz server holds the user initials and score they achieved in Blitz.
 
 ## Set up
 
